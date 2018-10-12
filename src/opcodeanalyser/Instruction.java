@@ -5,10 +5,10 @@ package opcodeanalyser;
 //leal    8(,%eax,4), %eax         # Arithmetic: multiply eax by 4 and add 8
 //leal    (%edx,%eax,2), %eax      # Arithmetic: multiply eax by 2 and add edx
 public class Instruction {
-	public String getAddress() {
+	public int getAddress() {
 		return address;
 	}
-	public void setAddress(String address) {
+	public void setAddress(int address) {
 		this.address = address;
 	}
 	public String getRawBytes() {
@@ -53,19 +53,18 @@ public class Instruction {
 	public void setMemoryRead(boolean isMemoryRead) {
 		this.isMemoryRead = isMemoryRead;
 	}
-	public Instruction(String address, String rawBytes, Opcode opcode, Operand operand1, Operand operand2,
-			boolean isControlTransfer, boolean isMemoryWrite, boolean isMemoryRead) {
+	public Instruction() {
+
+	}
+	public Instruction(int address, String rawBytes, Opcode opcode, Operand operand1, Operand operand2) {
 		super();
 		this.address = address;
 		this.rawBytes = rawBytes;
 		this.opcode = opcode;
 		this.operand1 = operand1;
 		this.operand2 = operand2;
-		this.isControlTransfer = isControlTransfer;
-		this.isMemoryWrite = isMemoryWrite;
-		this.isMemoryRead = isMemoryRead;
 	}
-	private String address;
+	private int address;
 	private String rawBytes;
 	private Opcode opcode;
 	private Operand operand1;

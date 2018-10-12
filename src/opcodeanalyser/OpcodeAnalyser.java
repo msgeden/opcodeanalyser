@@ -2,6 +2,7 @@ package opcodeanalyser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,20 +16,45 @@ public class OpcodeAnalyser {
 		// TODO Auto-generated method stub
 		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "small.txt";
 		String fileContent=FileHandler.readFileToString(filePath);
-		List<String> functions=Arrays.asList(fileContent.split(Definitions.NEW_LINE+Definitions.NEW_LINE));
-		for (String function : functions) {
-			List<String> instructionsStr = Arrays.asList(function.split(Definitions.NEW_LINE));
-			//instructions.stream().skip(1);
-			int functionStart;
-			int functionEnd;
-			for (String instructionStr : Iterables.skip(instructionsStr, 1)) {
+		
+		List<String> functionsStr=Arrays.asList(fileContent.split(Definitions.NEW_LINE+Definitions.NEW_LINE));
+		ArrayList<Function> functions= new ArrayList<Function>();
+		for (String functionStr : functionsStr) {
+			Function function = new Function();
+			int instructionCount=-1;
+			int address=0;
+			List<String> instructionsStr = Arrays.asList(functionStr.split(Definitions.NEW_LINE));
+			ArrayList<Instruction> instructions= new ArrayList<Instruction>();
+			for (String instructionStr : instructionsStr) {
+				
+				if (instructionCount==-1)
+				{
+					function.setIdentifier(instructionStr);
+					instructionCount++;
+					continue;				
+				}				
 				List<String> elements = Arrays.asList(instructionStr.split(Definitions.TAB_CHAR));
+				address = Integer.parseInt(elements.get(0).trim().substring(0, elements.get(0).trim().lastIndexOf(":")),16);
+			
+				if (instructionCount==0)
+					function.setStartAddress(address);
+				
 				Opcode opcode=new Opcode(elements.get(2));
 				List<String>  operandsStr = Arrays.asList(elements.get(3).split(Definitions.COMMA_CHAR));
-				for (String operandStr : operandsStr) {				
-					Operand operand=new Operand(operandStr);				
-				}
+				Operand operand1=null;
+				Operand operand2=null;
+				if (operandsStr.size()>0)
+					operand1=new Operand(operandsStr.get(0));
+				if (operandsStr.size()>1)
+					operand2=new Operand(operandsStr.get(1));
+				Instruction instruction = new Instruction(address,elements.get(1),opcode,operand1,operand2);
+				instructionCount++;		
+				instructions.add(instruction);
 			}
+			
+			function.setEndAddress(address);
+						
+			
 		}
 	}
 
