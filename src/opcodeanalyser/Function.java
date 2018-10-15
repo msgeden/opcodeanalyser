@@ -47,7 +47,7 @@ public class Function {
 		for (Instruction instruction:body) {
 			if (instruction.isMemoryWrite())
 				count++;
-			
+			 
 		}
 		return count;
 	}
