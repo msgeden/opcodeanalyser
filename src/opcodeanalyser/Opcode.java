@@ -25,6 +25,9 @@ public class Opcode {
 	public Opcode(String value) {
 		this.value = value;		
 	}
+	public Opcode() {
+		// TODO Auto-generated constructor stub
+	}
 	private Type type;
 	private String value;
 	private int numberOfOperands;

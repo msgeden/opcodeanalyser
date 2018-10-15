@@ -1,5 +1,9 @@
 package opcodeanalyser;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -25,9 +29,22 @@ public class Definitions {
 	public static final String WINDOWS_ELF = "exe";
 	public static final String[] LINUX_ELFS = new String[] { "axf", "bin", "elf", "o", "prx", "puff", "ko", "mod", "so"};
 
-	public static final String[] JUMPS = new String[] { "JEQ","JZ","JNE","JNZ","JC","JNC","JN","JGE","JL","JMP"};
-	public static final String[] CALLS = new String[] { "CALL","BR"};
-	public static final String[] RETS = new String[] { "RETI","RET"};
-	public static final String[] DATA = new String[] { "POP","PUSH"};
+	public static final Set<String> CJUMP_OPCODES = new HashSet<String>(Arrays.asList(
+		     new String[]{ "jeq","jz","jne","jnz","jc","jnc","jn","jge","jl"}
+		));
+	public static final Set<String> UCJUMP_OPCODES = new HashSet<String>(Arrays.asList(
+		     new String[]{ "jmp"}
+		));
+	public static final Set<String> CALL_OPCODES = new HashSet<String>(Arrays.asList(
+		     new String[]{ "call","br"}
+		));
+	public static final Set<String> RET_OPCODES = new HashSet<String>(Arrays.asList(
+			 new String[]{ "reti","ret"}
+		));
+	public static final String[] C_JUMPS = new String[] { "jeq","jz","jne","jnz","jc","jnc","jn","jge","jl"};
+	public static final String[] UC_JUMPS = new String[] { "jmp"};
+	public static final String[] CALLS = new String[] { "call","br"};
+	public static final String[] RETS = new String[] { "reti","ret"};
+	public static final String[] DATA = new String[] { "pop","push","mov"};
 	public static final String FUNCTION_SPLITTER = "\n";
 }

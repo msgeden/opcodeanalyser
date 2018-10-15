@@ -21,5 +21,8 @@ public class Operand {
 	public Operand(String value) {
 		this.value = value;
 	}
+	public Operand() {
+		// TODO Auto-generated constructor stub
+	}
 		
 }

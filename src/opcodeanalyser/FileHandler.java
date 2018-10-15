@@ -9,9 +9,6 @@ package opcodeanalyser;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 import org.apache.commons.io.FileUtils;
 
@@ -72,15 +69,6 @@ public class FileHandler {
 
 	public static String readFileToString(String filePath) throws IOException {
 		return FileUtils.readFileToString(FileUtils.getFile(filePath), Charset.defaultCharset());
-	}
-
-	public static String readFileToHexString(String filePath) throws IOException {
-		byte[] fileBytes = FileUtils.readFileToByteArray(FileUtils.getFile(filePath));
-		StringBuilder sb = new StringBuilder();
-		for (byte b : fileBytes) {
-			sb.append(String.format("%02X", b));
-		}
-		return sb.toString();
 	}
 
 }

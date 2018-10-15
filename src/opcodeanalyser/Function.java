@@ -41,4 +41,21 @@ public class Function {
 	private int startAddress;
 	private int endAddress;
 	private int instructionCount;
+	
+	public int getMemoryInstructionCount() {
+		int count=0;
+		for (Instruction instruction:body) {
+			if (instruction.isMemoryWrite())
+				count++;
+			
+		}
+		return count;
+	}
+	public int getControlInstructionCount() {
+		int count=0;
+		for (Instruction instruction:body)
+			if (instruction.isControlTransfer())
+				count++;
+		return count;
+	}
 }
