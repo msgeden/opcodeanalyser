@@ -16,83 +16,8 @@ public class OpcodeAnalyser {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		
-//		String operand1str="4(r1)";
-//		String operand2str="@r1";
-//		String operand3str="@r1";
-//		String regex[] = new String []{"(r.+)","^@r.+","^&.*"} ;
-//		boolean found=false;
-//		for (String feature : regex) {
-//		Pattern p = Pattern.compile(feature);
-//		Matcher m = p.matcher(operand2str);
-//		found = m.find();
-//		if (found) 
-//			System.out.println("YES");
-//		}
-		
-		
-		int controlCount = 0;
-		int memoryCount = 0;
-		int memoryReadCount = 0;
-		int memoryWriteCount = 0;
-		int totalCount = 0;
 		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "small.txt";
-		String fileContent = FileHandler.readFileToString(filePath);
-
-		List<String> functionsStr = Arrays.asList(fileContent.split(Definitions.NEW_LINE + Definitions.NEW_LINE));
-		ArrayList<Function> functions = new ArrayList<Function>();
-		for (String functionStr : functionsStr) {
-			Function function = new Function();
-			int instructionCount = -1;
-			int address = 0;
-			List<String> instructionsStr = Arrays.asList(functionStr.split(Definitions.NEW_LINE));
-			ArrayList<Instruction> instructions = new ArrayList<Instruction>();
-			for (String instructionStr : instructionsStr) {
-				Opcode opcode = null;
-				Operand operand1 = null;
-				Operand operand2 = null;
-
-				if (instructionCount == -1) {
-					function.setIdentifier(instructionStr);
-					instructionCount++;
-					continue;
-				}
-				List<String> elements = Arrays.asList(instructionStr.split(Definitions.TAB_CHAR));
-				address = Integer.parseInt(elements.get(0).trim().substring(0, elements.get(0).trim().lastIndexOf(":")),
-						16);
-
-				if (instructionCount == 0)
-					function.setStartAddress(address);
-				if (elements.size() > 2) {
-					opcode = new Opcode(elements.get(2));
-					//System.out.println(elements.get(0).trim() + opcode.getValue());
-
-					if (elements.size() > 3) {
-						List<String> operandsStr = Arrays.asList(elements.get(3).split(Definitions.COMMA_CHAR));
-
-						if (operandsStr.size() > 0)
-							operand1 = new Operand(operandsStr.get(0));
-						if (operandsStr.size() > 1)
-							operand2 = new Operand(operandsStr.get(1));
-					}
-					Instruction instruction = new Instruction(address, elements.get(1), opcode, operand1, operand2);
-					instructionCount++;
-					instructions.add(instruction);
-				}
-				
-			}
-			if (instructionCount != -1) {
-				function.setEndAddress(address);
-				function.setBody(instructions);
-				controlCount += function.getControlInstructionCount();
-				memoryCount += function.getMemoryInstructionCount();
-				totalCount += function.getBody().size();
-				functions.add(function);
-			}
-		}
-		System.out.println("# of Control Instructions: " + controlCount);
-		System.out.println("# of Memory Instructions: " + memoryCount);
-		System.out.println("# of Total Instructions: " + totalCount);
+		FileHandler.parseObjectFile(filePath);
 
 	}
 

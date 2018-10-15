@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 
-
 public class ObjectDumper {
 	public static void dumpBinaryFile(String filePath) {
 		try {
@@ -16,8 +15,6 @@ public class ObjectDumper {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
-
 	}
 
 	public static void dumpBinaryFiles(String dirPath) {
