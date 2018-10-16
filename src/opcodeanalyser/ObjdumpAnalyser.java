@@ -57,7 +57,10 @@ public static void printOpcodeFrequencies(Output objectFile) throws IOException 
 				if (!opcodeFrequencies.containsKey(opcode))
 					opcodeFrequencies.put(opcode, Integer.valueOf(1));
 				else
-					opcodeFrequencies.put(opcode,Integer.valueOf(opcodeFrequencies.get(opcode).intValue()+1));
+				{ 
+					int freq=opcodeFrequencies.get(opcode).intValue();
+					opcodeFrequencies.put(opcode,Integer.valueOf(freq+1));
+				}
 			}
 		}
 		for (Map.Entry<String, Integer> entry : opcodeFrequencies.entrySet()) {
