@@ -4,7 +4,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Instruction {
-
+	private int address;
+	private String rawBytes;
+	private Opcode opcode;
+	private Operand operand1;
+	private Operand operand2;
+	private int operandCount;
+	private String comment;
 	public Instruction() {
 
 	}
@@ -43,21 +49,27 @@ public class Instruction {
 		setMemoryRead();
 		setMemoryWrite();
 	}
-
 	public int getAddress() {
 		return address;
 	}
 	public String getRawBytes() {
 		return rawBytes;
 	}
-
-	private int address;
-	private String rawBytes;
-	private Opcode opcode;
-	private Operand operand1;
-	private Operand operand2;
-	private int operandCount;
-	private String comment;	
+	public Opcode getOpcode() {
+		return opcode;
+	}
+	public Operand getOperand1() {
+		return operand1;
+	}
+	public Operand getOperand2() {
+		return operand2;
+	}
+	public int getOperandCount() {
+		return operandCount;
+	}
+	public String getComment() {
+		return comment;
+	}
 	public boolean isControlTransfer() {
 		return controlTransfer;
 	}
@@ -79,7 +91,6 @@ public class Instruction {
 				|| Definitions.CALL_OPCODES.contains(opcode.getValue())
 				|| Definitions.RET_OPCODES.contains(opcode.getValue()));
 	}
-
 	public void setMemoryRead() {
 		boolean found = false;
 		if (operandCount == 0) {

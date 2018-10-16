@@ -10,6 +10,7 @@ public class BinaryAnalyser {
 		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "large.txt";
 		Output objectFile=FileHandler.parseObjectFile(filePath);
 		ObjdumpAnalyser.printStatistics(objectFile);
+		ObjdumpAnalyser.printOpcodeFrequencies(objectFile);
 		
 
 	}
