@@ -1,6 +1,5 @@
 package opcodeanalyser;
 
-import java.io.File;
 import java.io.IOException;
 
 public class BinaryAnalyser {
@@ -11,10 +10,7 @@ public class BinaryAnalyser {
 		Output objectFile=FileHandler.parseObjectFile(filePath);
 		ObjdumpAnalyser.printStatistics(objectFile);
 		ObjdumpAnalyser.printOpcodeFrequencies(objectFile);
-		
-
 	}
-
 }
 //0000d23a <.Loc.178.1>:
 //    d23a:	1c 42 08 03 	mov	&0x0308,r12	;0x0308
