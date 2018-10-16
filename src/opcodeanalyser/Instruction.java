@@ -14,9 +14,9 @@ public class Instruction {
 		this.rawBytes = rawBytes;
 		this.opcode = opcode;
 		this.operandCount = 0;
-		this.isControlTransfer = isControlTransfer();
-		this.isMemoryRead = isMemoryRead();
-		this.isMemoryWrite = isMemoryWrite();
+		setControlTransfer();
+		setMemoryRead();
+		setMemoryWrite();
 	}
 
 	public Instruction(int address, String rawBytes, Opcode opcode, Operand operand1) {
@@ -26,9 +26,9 @@ public class Instruction {
 		this.opcode = opcode;
 		this.operand1 = operand1;
 		this.operandCount = 1;
-		this.isControlTransfer = isControlTransfer();
-		this.isMemoryRead = isMemoryRead();
-		this.isMemoryWrite = isMemoryWrite();
+		setControlTransfer();
+		setMemoryRead();
+		setMemoryWrite();
 	}
 
 	public Instruction(int address, String rawBytes, Opcode opcode, Operand operand1, Operand operand2) {
@@ -39,9 +39,16 @@ public class Instruction {
 		this.operand1 = operand1;
 		this.operand2 = operand2;
 		this.operandCount = 2;
-		this.isControlTransfer = isControlTransfer();
-		this.isMemoryRead = isMemoryRead();
-		this.isMemoryWrite = isMemoryWrite();
+		setControlTransfer();
+		setMemoryRead();
+		setMemoryWrite();
+	}
+
+	public int getAddress() {
+		return address;
+	}
+	public String getRawBytes() {
+		return rawBytes;
 	}
 
 	private int address;
@@ -50,34 +57,41 @@ public class Instruction {
 	private Operand operand1;
 	private Operand operand2;
 	private int operandCount;
-	private boolean isControlTransfer;
-	private boolean isMemoryWrite;
-	private boolean isMemoryRead;
-
 	public boolean isControlTransfer() {
+		return controlTransfer;
+	}
+	public boolean isMemoryRead() {
+		return memoryRead;
+	}
+	public boolean isMemoryWrite() {
+		return memoryWrite;
+	}
 
-		return (Definitions.CJUMP_OPCODES.contains(opcode.getValue())
+	private boolean controlTransfer;
+	private boolean memoryRead;
+	private boolean memoryWrite;	
+
+	public void setControlTransfer() {
+
+		controlTransfer = (Definitions.CJUMP_OPCODES.contains(opcode.getValue())
 				|| Definitions.UCJUMP_OPCODES.contains(opcode.getValue())
 				|| Definitions.CALL_OPCODES.contains(opcode.getValue())
 				|| Definitions.RET_OPCODES.contains(opcode.getValue()));
 	}
 
-	public boolean isMemoryRead() {
+	public void setMemoryRead() {
+		boolean found = false;
 		if (operandCount == 0) {
 			if (Definitions.RET_OPCODES.contains(opcode.getValue()))
-				return true;
-			else
-				return false;
+				found=true;			
 		} else if (operandCount == 1) {
 			if (opcode.getValue().equals("pop"))
-				return true;
-			else
-				return false;
-
+				found=true;			
 		} else {
 			String regex[] = FileHandler.readArchitectureValue(Definitions.ARC_MEMORY_OPERANDS)
 					.split(Definitions.COMMA);
-			boolean found = false;
+			//String regex[] = new String[] {"^&.+","^@r.+",".+(r.+)"};
+					//.split(Definitions.COMMA);			
 			for (String feature : regex) {
 				Pattern p = Pattern.compile(feature);
 				Matcher m = p.matcher(operand1.getValue());
@@ -85,23 +99,21 @@ public class Instruction {
 					System.out.println("R:"+printInstruction());
 					found = true;
 				}
-			}
-			return found;
+			}			
 		}
+		memoryRead=found;
 	}
 
-	public boolean isMemoryWrite() {
-		if (operandCount == 0)
-			return false;
-		else if (operandCount == 1) {
+	public void setMemoryWrite() {
+		boolean found = false;
+		if (operandCount == 1) {
 			if (opcode.getValue().equals("push"))
-				return true;
-			else
-				return false;
-		} else {
+				found=true;
+		
+		} else if (operandCount == 2){
 			String regex[] = FileHandler.readArchitectureValue(Definitions.ARC_MEMORY_OPERANDS)
 					.split(Definitions.COMMA);
-			boolean found = false;
+			//String regex[] = new String[] {"^&.+","^@r.+",".+(r.+)"};			
 			for (String feature : regex) {
 				Pattern p = Pattern.compile(feature);
 				Matcher m = p.matcher(operand2.getValue());
@@ -109,9 +121,9 @@ public class Instruction {
 					System.out.println("W:"+printInstruction());
 					found = true;
 				}
-			}
-			return found;
+			}			
 		}
+		memoryWrite=found;
 	}
 
 	public String printInstruction() {

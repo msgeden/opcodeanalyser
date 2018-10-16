@@ -46,7 +46,6 @@ public class FileHandler {
 		}
 		return prop.getProperty(key);
 	}
-
 	public static void writeConfigValue(String key, String val) {
 		Properties prop = new Properties();
 		InputStream input;
@@ -88,8 +87,9 @@ public class FileHandler {
 	
 	public static Output parseObjectFile(String path) throws IOException
 	{
-		Output objectFile = new Output();
-		String fileContent = FileHandler.readFileToString(path);		
+		Output objectFile = new Output();		
+		String fileContent = FileHandler.readFileToString(path);
+		objectFile.setFileName(new File(path).getName());
 		List<String> functionsStr = Arrays.asList(fileContent.split(Definitions.NEW_LINE + Definitions.NEW_LINE));
 		ArrayList<Function> functions = new ArrayList<Function>();
 		for (String functionStr : functionsStr) {
@@ -99,13 +99,14 @@ public class FileHandler {
 			List<String> instructionsStr = Arrays.asList(functionStr.split(Definitions.NEW_LINE));
 			ArrayList<Instruction> instructions = new ArrayList<Instruction>();
 			for (String instructionStr : instructionsStr) {
-				System.out.println(instructionStr);
+				System.out.println(instructionStr);//TODO:remove
 				if (instructionCount == -1) {
-					function.setFunctionName(instructionStr);
+					function.setFunctionName(instructionStr.substring(instructionStr.indexOf("<")+1,instructionStr.indexOf(">")));
 					instructionCount++;
 					continue;
 				}
-				instructionStr = instructionStr.substring(0,instructionStr.lastIndexOf(Definitions.SEMICOLON_CHAR));
+				if (instructionStr.contains(Definitions.SEMICOLON_CHAR))
+						instructionStr = instructionStr.substring(0,instructionStr.lastIndexOf(Definitions.SEMICOLON_CHAR));
 				List<String> elements = Arrays.asList(instructionStr.split(Definitions.TAB_CHAR,4));
 				address = Integer.parseInt(elements.get(0).trim().substring(0, elements.get(0).trim().lastIndexOf(Definitions.COLON_CHAR)),
 						16);

@@ -36,7 +36,7 @@ public class Function extends Code{
 			else if (instruction.isMemoryRead())
 				super.readCount++;
 			else if (instruction.isMemoryWrite())
-				super.readCount++;
+				super.writeCount++;
 			else
 				super.otherCount++;
 		}

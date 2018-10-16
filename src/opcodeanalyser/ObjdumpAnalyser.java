@@ -34,9 +34,12 @@ public class ObjdumpAnalyser {
 		FileUtils.write(instructionStatsFile,
 				Definitions.NEW_LINE + objectFile.getFileName() + Definitions.TAB_CHAR +
 				objectFile.getControlCount()+Definitions.TAB_CHAR+objectFile.getReadCount()+Definitions.TAB_CHAR+objectFile.getWriteCount()+Definitions.TAB_CHAR+objectFile.getOtherCount(),Charset.defaultCharset(),true);
-		
+		System.out.print(
+				Definitions.NEW_LINE + objectFile.getFileName() + Definitions.TAB_CHAR +
+				objectFile.getControlCount()+Definitions.TAB_CHAR+objectFile.getReadCount()+Definitions.TAB_CHAR+objectFile.getWriteCount()+Definitions.TAB_CHAR+objectFile.getOtherCount());		
 		return count;
 	}
+
 	public int getControlInstructionCount() {
 		int count=0;
 		return count;
