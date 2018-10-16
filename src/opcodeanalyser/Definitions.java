@@ -18,6 +18,7 @@ public class Definitions {
 	
 	public static final String BINARY_PATH = "binaryPath";
 	public static final String DISSASSEMBLED_PATH = "disassembledPath";
+	public static final String STATS_PATH = "statsPath";
 	public static final String CPU_ARCHITECTURE = "architecture";
 	
 	public static final String ARC_CONDITIONAL_JUMPS = "conditionalJumps";
@@ -31,6 +32,8 @@ public class Definitions {
 	public static final String EDGE_CHAR = ">";
 	public static final String COMMA = ",";
 	public static final String BLANK_CHAR = "\b";
+	public static final String SEMICOLON_CHAR = ";";
+	public static final String COLON_CHAR = ":";
 	public static final String COMMA_CHAR = ",";
 	public static final String TAB_CHAR = "\t";
 	public static final String NEW_LINE = "\n";	

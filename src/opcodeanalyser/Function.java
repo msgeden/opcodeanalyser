@@ -2,18 +2,18 @@ package opcodeanalyser;
 
 import java.util.ArrayList;
 
-public class Function {
-	public String getIdentifier() {
-		return identifier;
+public class Function extends Code{
+	public String getFunctionName() {
+		return functionName;
 	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
+	public void setFunctionName(String functionName) {
+		this.functionName = functionName;
 	}
-	public ArrayList<Instruction> getBody() {
-		return body;
+	public ArrayList<Instruction> getInstructions() {
+		return instructions;
 	}
-	public void setBody(ArrayList<Instruction> body) {
-		this.body = body;
+	public void setInstructions(ArrayList<Instruction> instructions) {
+		this.instructions = instructions;
 	}
 	public int getStartAddress() {
 		return startAddress;
@@ -27,8 +27,23 @@ public class Function {
 	public void setEndAddress(int endAddress) {
 		this.endAddress = endAddress;
 	}
-	private String identifier;
-	private ArrayList<Instruction> body; 
+	public void countInstructions()
+	{
+		for (Instruction instruction:instructions)
+		{
+			if (instruction.isControlTransfer())
+				super.controlCount++;
+			else if (instruction.isMemoryRead())
+				super.readCount++;
+			else if (instruction.isMemoryWrite())
+				super.readCount++;
+			else
+				super.otherCount++;
+		}
+	}
+	private String functionName;
+	private ArrayList<Instruction> instructions; 
 	private int startAddress;
 	private int endAddress;
+	
 }

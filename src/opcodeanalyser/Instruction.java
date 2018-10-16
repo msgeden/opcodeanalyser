@@ -54,7 +54,7 @@ public class Instruction {
 	private boolean isMemoryWrite;
 	private boolean isMemoryRead;
 
-	private boolean isControlTransfer() {
+	public boolean isControlTransfer() {
 
 		return (Definitions.CJUMP_OPCODES.contains(opcode.getValue())
 				|| Definitions.UCJUMP_OPCODES.contains(opcode.getValue())
@@ -62,7 +62,7 @@ public class Instruction {
 				|| Definitions.RET_OPCODES.contains(opcode.getValue()));
 	}
 
-	private boolean isMemoryRead() {
+	public boolean isMemoryRead() {
 		if (operandCount == 0) {
 			if (Definitions.RET_OPCODES.contains(opcode.getValue()))
 				return true;
@@ -90,7 +90,7 @@ public class Instruction {
 		}
 	}
 
-	private boolean isMemoryWrite() {
+	public boolean isMemoryWrite() {
 		if (operandCount == 0)
 			return false;
 		else if (operandCount == 1) {

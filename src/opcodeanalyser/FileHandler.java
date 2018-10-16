@@ -99,14 +99,15 @@ public class FileHandler {
 			List<String> instructionsStr = Arrays.asList(functionStr.split(Definitions.NEW_LINE));
 			ArrayList<Instruction> instructions = new ArrayList<Instruction>();
 			for (String instructionStr : instructionsStr) {
-			
+				System.out.println(instructionStr);
 				if (instructionCount == -1) {
-					function.setIdentifier(instructionStr);
+					function.setFunctionName(instructionStr);
 					instructionCount++;
 					continue;
 				}
-				List<String> elements = Arrays.asList(instructionStr.split(Definitions.TAB_CHAR));
-				address = Integer.parseInt(elements.get(0).trim().substring(0, elements.get(0).trim().lastIndexOf(":")),
+				instructionStr = instructionStr.substring(0,instructionStr.lastIndexOf(Definitions.SEMICOLON_CHAR));
+				List<String> elements = Arrays.asList(instructionStr.split(Definitions.TAB_CHAR,4));
+				address = Integer.parseInt(elements.get(0).trim().substring(0, elements.get(0).trim().lastIndexOf(Definitions.COLON_CHAR)),
 						16);
 
 				if (instructionCount == 0)
@@ -115,19 +116,21 @@ public class FileHandler {
 					int operandCount = 0;
 					List<String> operandsStr = Arrays.asList(elements.get(3).split(Definitions.COMMA_CHAR));
 					operandCount =operandsStr.size(); 
+					
 					if (operandCount == 0)
-						instructions.add(new Instruction(address, elements.get(1),new Opcode(elements.get(2))));
+						instructions.add(new Instruction(address, elements.get(1).trim(),new Opcode(elements.get(2).trim().replace("\t", ""))));
 					else if (operandCount == 1) 
-						instructions.add(new Instruction(address, elements.get(1),new Opcode(elements.get(2)), new Operand(operandsStr.get(0))));							
+						instructions.add(new Instruction(address, elements.get(1).trim(),new Opcode(elements.get(2).trim().replace("\t", "")), new Operand(operandsStr.get(0).trim().replace("\t", ""))));							
 					else if (operandCount == 2) 
-						instructions.add(new Instruction(address, elements.get(1),new Opcode(elements.get(2)), new Operand(operandsStr.get(0)),new Operand(operandsStr.get(1))));					
+						instructions.add(new Instruction(address, elements.get(1).trim(),new Opcode(elements.get(2).trim().replace("\t", "")), new Operand(operandsStr.get(0).trim().replace("\t", "")),new Operand(operandsStr.get(1).trim().replace("\t", ""))));
+					
 				}				
 			}
 			function.setEndAddress(address);
-			function.setBody(instructions);
+			function.setInstructions(instructions);
 			functions.add(function);
 		}
-		objectFile.setCode(functions);		
+		objectFile.setFunctions(functions);		
 		return objectFile;
 	}
 
