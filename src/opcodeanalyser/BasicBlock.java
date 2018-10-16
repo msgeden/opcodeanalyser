@@ -2,12 +2,12 @@ package opcodeanalyser;
 
 import java.util.ArrayList;
 
-public class Function extends Code{
-	public String getFunctionName() {
-		return functionName;
+public class BasicBlock extends Code{
+	public String getBlockName() {
+		return blockName;
 	}
-	public void setFunctionName(String functionName) {
-		this.functionName = functionName;
+	public void setBlockName(String functionName) {
+		this.blockName = functionName;
 	}
 	public ArrayList<Instruction> getInstructions() {
 		return instructions;
@@ -31,6 +31,7 @@ public class Function extends Code{
 	{
 		for (Instruction instruction:instructions)
 		{
+			super.totalCount++;
 			if (instruction.isControlTransfer())
 				super.controlCount++;
 			else if (instruction.isMemoryRead())
@@ -41,7 +42,7 @@ public class Function extends Code{
 				super.otherCount++;
 		}
 	}
-	private String functionName;
+	private String blockName;
 	private ArrayList<Instruction> instructions; 
 	private int startAddress;
 	private int endAddress;

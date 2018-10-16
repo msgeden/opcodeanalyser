@@ -15,10 +15,10 @@ public class Output extends Code{
 	public void setFileFormat(String fileFormat) {
 		this.fileFormat = fileFormat;
 	}
-	public ArrayList<Function> getFunctions() {
+	public ArrayList<BasicBlock> getFunctions() {
 		return functions;
 	}
-	public void setFunctions(ArrayList<Function> functions) {
+	public void setFunctions(ArrayList<BasicBlock> functions) {
 		this.functions = functions;
 	}
 	public ArrayList<String> getInterrupts() {
@@ -29,16 +29,17 @@ public class Output extends Code{
 	}
 	public void countInstructions()
 	{
-		for (Function function:functions)
+		for (BasicBlock function:functions)
 		{
 			super.controlCount+=function.getControlCount();
 			super.readCount+=function.getReadCount();
 			super.writeCount+=function.getWriteCount();
 			super.otherCount+=function.getOtherCount();
+			super.totalCount+=function.getTotalCount();
 		}
 	}
 	private String fileName;
 	private String fileFormat;
-	private ArrayList<Function> functions; 
-	private ArrayList<String> interrupts;
+	private ArrayList<BasicBlock> functions; 
+	private ArrayList<String> interrupts;	
 }

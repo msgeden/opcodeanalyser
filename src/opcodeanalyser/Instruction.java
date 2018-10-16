@@ -57,6 +57,7 @@ public class Instruction {
 	private Operand operand1;
 	private Operand operand2;
 	private int operandCount;
+	private String comment;	
 	public boolean isControlTransfer() {
 		return controlTransfer;
 	}
@@ -96,7 +97,7 @@ public class Instruction {
 				Pattern p = Pattern.compile(feature);
 				Matcher m = p.matcher(operand1.getValue());
 				if (m.matches()) {
-					System.out.println("R:"+printInstruction());
+					//System.out.println("R:"+printInstruction());
 					found = true;
 				}
 			}			
@@ -118,7 +119,7 @@ public class Instruction {
 				Pattern p = Pattern.compile(feature);
 				Matcher m = p.matcher(operand2.getValue());
 				if (m.matches()) {
-					System.out.println("W:"+printInstruction());
+					//System.out.println("W:"+printInstruction());
 					found = true;
 				}
 			}			

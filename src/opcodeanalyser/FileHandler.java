@@ -91,9 +91,9 @@ public class FileHandler {
 		String fileContent = FileHandler.readFileToString(path);
 		objectFile.setFileName(new File(path).getName());
 		List<String> functionsStr = Arrays.asList(fileContent.split(Definitions.NEW_LINE + Definitions.NEW_LINE));
-		ArrayList<Function> functions = new ArrayList<Function>();
+		ArrayList<BasicBlock> blocks = new ArrayList<BasicBlock>();
 		for (String functionStr : functionsStr) {
-			Function function = new Function();
+			BasicBlock block = new BasicBlock();
 			int instructionCount = -1;
 			int address = 0;
 			List<String> instructionsStr = Arrays.asList(functionStr.split(Definitions.NEW_LINE));
@@ -101,7 +101,7 @@ public class FileHandler {
 			for (String instructionStr : instructionsStr) {
 				System.out.println(instructionStr);//TODO:remove
 				if (instructionCount == -1) {
-					function.setFunctionName(instructionStr.substring(instructionStr.indexOf("<")+1,instructionStr.indexOf(">")));
+					block.setBlockName(instructionStr.substring(instructionStr.indexOf("<")+1,instructionStr.indexOf(">")));
 					instructionCount++;
 					continue;
 				}
@@ -112,7 +112,7 @@ public class FileHandler {
 						16);
 
 				if (instructionCount == 0)
-					function.setStartAddress(address);
+					block.setStartAddress(address);
 				if (elements.size() > 2) {					
 					int operandCount = 0;
 					List<String> operandsStr = Arrays.asList(elements.get(3).split(Definitions.COMMA_CHAR));
@@ -127,11 +127,11 @@ public class FileHandler {
 					
 				}				
 			}
-			function.setEndAddress(address);
-			function.setInstructions(instructions);
-			functions.add(function);
+			block.setEndAddress(address);
+			block.setInstructions(instructions);
+			blocks.add(block);
 		}
-		objectFile.setFunctions(functions);		
+		objectFile.setFunctions(blocks);		
 		return objectFile;
 	}
 
