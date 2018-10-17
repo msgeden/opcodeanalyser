@@ -11,6 +11,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import org.apache.commons.io.FileUtils;
@@ -93,6 +94,8 @@ public class FileHandler {
 		List<String> functionsStr = Arrays.asList(fileContent.split(Definitions.NEW_LINE + Definitions.NEW_LINE));
 		ArrayList<BasicBlock> blocks = new ArrayList<BasicBlock>();
 		for (String functionStr : functionsStr) {
+			if (!functionStr.contains(">:"))
+				continue;
 			BasicBlock block = new BasicBlock();
 			int instructionCount = -1;
 			int address = 0;
@@ -134,5 +137,7 @@ public class FileHandler {
 		objectFile.setFunctions(blocks);		
 		return objectFile;
 	}
-
+	public static Collection<File> findFiles(String path, String[] extensions) {
+		return FileUtils.listFiles(FileUtils.getFile(path), extensions, true);
+	}
 }

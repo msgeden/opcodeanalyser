@@ -1,15 +1,24 @@
 package opcodeanalyser;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 public class BinaryAnalyser {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "main-d.txt";
-		Output objectFile=FileHandler.parseObjectFile(filePath);
-		ObjdumpAnalyser.printStatistics(objectFile);
-		ObjdumpAnalyser.printOpcodeFrequencies(objectFile);
+		Collection<File> files = FileHandler.findFiles(FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH),
+				new String[] { "txt" });
+		//String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "maino-d.txt";
+
+		for (File file:files)
+		{
+			String filePath = file.getAbsolutePath();
+			Output objectFile=FileHandler.parseObjectFile(filePath);
+			ObjdumpAnalyser.printStatistics(objectFile);
+			ObjdumpAnalyser.printOpcodeFrequencies(objectFile);
+		}
 	}
 }
 //0000d23a <.Loc.178.1>:
