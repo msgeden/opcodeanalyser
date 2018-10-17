@@ -6,7 +6,7 @@ public class BinaryAnalyser {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "large.txt";
+		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "main-d.txt";
 		Output objectFile=FileHandler.parseObjectFile(filePath);
 		ObjdumpAnalyser.printStatistics(objectFile);
 		ObjdumpAnalyser.printOpcodeFrequencies(objectFile);
