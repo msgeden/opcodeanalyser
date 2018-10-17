@@ -11,6 +11,8 @@ import org.apache.commons.io.FileUtils;
 public class ObjdumpAnalyser {
 	public static void printStatistics(Output objectFile) throws IOException {
 
+		File totalStatsFile = new File(FileHandler.readConfigValue(Definitions.STATS_PATH) + "total_memory_control.tsv");
+		
 		File instructionStatsFile = new File(FileHandler.readConfigValue(Definitions.STATS_PATH) + "memory_control_"
 				+ objectFile.getFileName().replaceAll("txt", "tsv"));
 		FileUtils.deleteQuietly(instructionStatsFile);
@@ -18,6 +20,11 @@ public class ObjdumpAnalyser {
 				"FUNCTION" + Definitions.TAB_CHAR + "CONTROL_TRANSFERS" + Definitions.TAB_CHAR + "MEMORY_READ"
 						+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
 						+ "TOTAL",
+				Charset.defaultCharset(), true);
+		FileUtils.write(totalStatsFile,
+				"FUNCTION" + Definitions.TAB_CHAR + "CONTROL_TRANSFERS" + Definitions.TAB_CHAR + "MEMORY_READ"
+						+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
+						+ "TOTAL"+ Definitions.TAB_CHAR + "CONTROL_RATIO"+ Definitions.TAB_CHAR + "READ_RATIO"+ Definitions.TAB_CHAR + "WRITE_RATIO"+ Definitions.TAB_CHAR + "OTHER_RATIO",
 				Charset.defaultCharset(), true);
 		System.out.print("FUNCTION" + Definitions.TAB_CHAR + "CONTROL_TRANSFERS" + Definitions.TAB_CHAR + "MEMORY_READ"
 				+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
@@ -48,6 +55,12 @@ public class ObjdumpAnalyser {
 				+ objectFile.getControlCount() + Definitions.TAB_CHAR + objectFile.getReadCount() + Definitions.TAB_CHAR
 				+ objectFile.getWriteCount() + Definitions.TAB_CHAR + objectFile.getOtherCount() + Definitions.TAB_CHAR
 				+ objectFile.getTotalCount());
+		FileUtils.write(totalStatsFile,
+				Definitions.NEW_LINE + objectFile.getFileName() + Definitions.TAB_CHAR + objectFile.getControlCount()
+						+ Definitions.TAB_CHAR + objectFile.getReadCount() + Definitions.TAB_CHAR
+						+ objectFile.getWriteCount() + Definitions.TAB_CHAR + objectFile.getOtherCount()
+						+ Definitions.TAB_CHAR + objectFile.getTotalCount()+ Definitions.TAB_CHAR+(float)objectFile.getControlCount()/objectFile.getTotalCount()+ Definitions.TAB_CHAR+(float)objectFile.getReadCount()/objectFile.getTotalCount()+ Definitions.TAB_CHAR+(float)objectFile.getWriteCount()/objectFile.getTotalCount()+ Definitions.TAB_CHAR+(float)objectFile.getOtherCount()/objectFile.getTotalCount(),
+				Charset.defaultCharset(), true);
 	}
 
 	public static void printOpcodeFrequencies(Output objectFile) throws IOException {

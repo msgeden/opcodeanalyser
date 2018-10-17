@@ -111,6 +111,8 @@ public class FileHandler {
 				if (instructionStr.contains(Definitions.SEMICOLON_CHAR))
 						instructionStr = instructionStr.substring(0,instructionStr.lastIndexOf(Definitions.SEMICOLON_CHAR));
 				List<String> elements = Arrays.asList(instructionStr.split(Definitions.TAB_CHAR,4));
+				if (elements.size()>2)
+				{
 				address = Integer.parseInt(elements.get(0).trim().substring(0, elements.get(0).trim().lastIndexOf(Definitions.COLON_CHAR)),
 						16);
 
@@ -128,7 +130,9 @@ public class FileHandler {
 					else if (operandCount == 2) 
 						instructions.add(new Instruction(address, elements.get(1).trim(),new Opcode(elements.get(2).trim().replace("\t", "")), new Operand(operandsStr.get(0).trim().replace("\t", "")),new Operand(operandsStr.get(1).trim().replace("\t", ""))));
 					
-				}				
+					
+				}	
+				}
 			}
 			block.setEndAddress(address);
 			block.setInstructions(instructions);

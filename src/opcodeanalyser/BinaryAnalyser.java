@@ -15,6 +15,7 @@ public class BinaryAnalyser {
 		for (File file:files)
 		{
 			String filePath = file.getAbsolutePath();
+			System.out.println(filePath);
 			Output objectFile=FileHandler.parseObjectFile(filePath);
 			ObjdumpAnalyser.printStatistics(objectFile);
 			ObjdumpAnalyser.printOpcodeFrequencies(objectFile);
