@@ -2,7 +2,7 @@ package opcodeanalyser;
 
 import java.util.ArrayList;
 
-public class BasicBlock extends Code{
+public class Block extends Code{
 	public String getBlockName() {
 		return blockName;
 	}
@@ -46,5 +46,4 @@ public class BasicBlock extends Code{
 	private ArrayList<Instruction> instructions; 
 	private int startAddress;
 	private int endAddress;
-	
 }

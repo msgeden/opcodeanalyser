@@ -30,7 +30,7 @@ public class ObjdumpAnalyser {
 				+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
 				+ "TOTAL");
 
-		for (BasicBlock block : objectFile.getFunctions()) {
+		for (Block block : objectFile.getFunctions()) {
 			block.countInstructions();
 			FileUtils.write(instructionStatsFile,
 					Definitions.NEW_LINE + block.getBlockName() + Definitions.TAB_CHAR + block.getControlCount()
@@ -72,7 +72,7 @@ public class ObjdumpAnalyser {
 				true);
 		System.out.print("\nOPCODE" + Definitions.TAB_CHAR + "COUNT");
 		HashMap<String, Integer> opcodeFrequencies = new HashMap<String, Integer>();
-		for (BasicBlock block : objectFile.getFunctions()) {
+		for (Block block : objectFile.getFunctions()) {
 			for (Instruction instruction : block.getInstructions()) {
 				String opcode = instruction.getOpcode().getValue();
 				if (!opcodeFrequencies.containsKey(opcode))
