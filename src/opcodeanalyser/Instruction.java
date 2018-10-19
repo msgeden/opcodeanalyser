@@ -14,6 +14,10 @@ public class Instruction implements Comparable<Instruction> {
 	public Instruction() {
 
 	}
+	public Instruction(int address) {
+		super();
+		this.address = address;	
+	}
 	public Instruction(int address, String rawBytes, Opcode opcode) {
 		super();
 		this.address = address;

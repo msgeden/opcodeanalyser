@@ -48,7 +48,7 @@ public class Definitions {
 		     new String[]{ "jmp"}
 		));
 	public static final Set<String> CALL_OPCODES = new HashSet<String>(Arrays.asList(
-		     new String[]{ "call","br"}
+		     new String[]{ "call"}
 		));
 	public static final Set<String> RET_OPCODES = new HashSet<String>(Arrays.asList(
 			 new String[]{ "reti","ret"}

@@ -23,19 +23,23 @@ public class RIMExtractor {
 		String fileContent = FileHandler.readFileToString(path);
 		List<String> functionsStr = Arrays.asList(fileContent.split(Definitions.NEW_LINE + Definitions.NEW_LINE));
 		for (String functionStr : functionsStr) {
+			if (functionStr.contains("<"+functionName +">"))
+			{				
+				mainAddress=Integer.parseInt(functionStr.substring(0,functionStr.indexOf(" ")),16);
+				System.out.println(functionStr);// TODO:remove
+			}
 			if (!functionStr.contains(">:"))
 				continue;
 			int instructionCount = -1;
 			int address = 0;
 			List<String> instructionsStr = Arrays.asList(functionStr.split(Definitions.NEW_LINE));
 			for (String instructionStr : instructionsStr) {
-				System.out.println(instructionStr);// TODO:remove
+				//System.out.println(instructionStr);// TODO:remove
 				if (instructionCount == -1) {
 					instructionCount++;
 					continue;
 				}
-				if (instructionStr.substring(instructionStr.indexOf("<") + 1, instructionStr.indexOf(">")).equals(functionName))
-					mainAddress=Integer.parseInt(instructionStr.substring(0,instructionStr.indexOf(Definitions.BLANK_CHAR)));
+				
 				if (instructionStr.contains(Definitions.SEMICOLON_CHAR))
 					instructionStr = instructionStr.substring(0,
 							instructionStr.lastIndexOf(Definitions.SEMICOLON_CHAR));
@@ -72,7 +76,7 @@ public class RIMExtractor {
 	public static void main(String[] args) throws IOException 
 	{
 		
-		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "main.o.txt";	
+		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "appoutO0.txt";	
 		String functionName="main";			
 		instructions=parseObjectFileAsInstructionList(filePath,functionName);
 		
@@ -114,7 +118,8 @@ public class RIMExtractor {
 		for (int i=getInstructionIndex(blockAddress);i<instructions.size();i++)
 		{
 			int targetAddress=0;
-			String opcode=instructions.get(i).getOpcode().getValue();			
+			String opcode=instructions.get(i).getOpcode().getValue();	
+			System.out.println(instructions.get(i).printInstruction());
 			if (instructions.get(i).iscJumpTransfer())
 			{
 				//jnz $+2
@@ -154,7 +159,7 @@ public class RIMExtractor {
 	}
 	private static int getInstructionIndex(int address)
 	{
-	    int index = Collections.binarySearch(instructions, new Instruction(address, null,null)); 
+	    int index = Collections.binarySearch(instructions, new Instruction(address)); 
 		return index;	
 	}
 	
