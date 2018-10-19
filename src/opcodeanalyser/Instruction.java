@@ -3,7 +3,7 @@ package opcodeanalyser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Instruction {
+public class Instruction implements Comparable<Instruction> {
 	private int address;
 	private String rawBytes;
 	private Opcode opcode;
@@ -49,6 +49,19 @@ public class Instruction {
 		setMemoryRead();
 		setMemoryWrite();
 	}
+	public Instruction(int address, String rawBytes, Opcode opcode, Operand operand1, Operand operand2,String comment) {
+		super();
+		this.address = address;
+		this.rawBytes = rawBytes;
+		this.opcode = opcode;
+		this.operand1 = operand1;
+		this.operand2 = operand2;
+		this.operandCount = 2;
+		this.comment=comment;
+		setControlTransfer();
+		setMemoryRead();
+		setMemoryWrite();
+	}
 	public int getAddress() {
 		return address;
 	}
@@ -79,8 +92,24 @@ public class Instruction {
 	public boolean isMemoryWrite() {
 		return memoryWrite;
 	}
+	public boolean isRetTransfer() {
+		return retTransfer;
+	}
+	public boolean isCallTransfer() {
+		return callTransfer;
+	}
+	public boolean iscJumpTransfer() {
+		return cJumpTransfer;
+	}
+	public boolean isUcJumpTransfer() {
+		return ucJumpTransfer;
+	}
 
 	private boolean controlTransfer;
+	private boolean retTransfer;	
+	private boolean callTransfer;
+	private boolean cJumpTransfer;
+	private boolean ucJumpTransfer;
 	private boolean memoryRead;
 	private boolean memoryWrite;	
 
@@ -90,6 +119,22 @@ public class Instruction {
 				|| Definitions.UCJUMP_OPCODES.contains(opcode.getValue())
 				|| Definitions.CALL_OPCODES.contains(opcode.getValue())
 				|| Definitions.RET_OPCODES.contains(opcode.getValue()));
+		setRetTransfer();
+		setCallTransfer();
+		setCJumpTransfer();
+		setUcJumpTransfer();
+	}
+	public void setRetTransfer() {
+		retTransfer = Definitions.RET_OPCODES.contains(opcode.getValue());
+	}
+	public void setCallTransfer() {
+		callTransfer = Definitions.CALL_OPCODES.contains(opcode.getValue());
+	}
+	public void setCJumpTransfer() {
+		cJumpTransfer = Definitions.CJUMP_OPCODES.contains(opcode.getValue());
+	}
+	public void setUcJumpTransfer() {
+		ucJumpTransfer = Definitions.UCJUMP_OPCODES.contains(opcode.getValue());
 	}
 	public void setMemoryRead() {
 		boolean found = false;
@@ -102,13 +147,10 @@ public class Instruction {
 		} else {
 			String regex[] = FileHandler.readArchitectureValue(Definitions.ARC_MEMORY_OPERANDS)
 					.split(Definitions.COMMA);
-			//String regex[] = new String[] {"^&.+","^@r.+",".+(r.+)"};
-					//.split(Definitions.COMMA);			
 			for (String feature : regex) {
 				Pattern p = Pattern.compile(feature);
 				Matcher m = p.matcher(operand1.getValue());
 				if (m.matches()) {
-					//System.out.println("R:"+printInstruction());
 					found = true;
 				}
 			}			
@@ -125,12 +167,10 @@ public class Instruction {
 		} else if (operandCount == 2){
 			String regex[] = FileHandler.readArchitectureValue(Definitions.ARC_MEMORY_OPERANDS)
 					.split(Definitions.COMMA);
-			//String regex[] = new String[] {"^&.+","^@r.+",".+(r.+)"};			
 			for (String feature : regex) {
 				Pattern p = Pattern.compile(feature);
 				Matcher m = p.matcher(operand2.getValue());
 				if (m.matches()) {
-					//System.out.println("W:"+printInstruction());
 					found = true;
 				}
 			}			
@@ -150,5 +190,10 @@ public class Instruction {
 		default:
 			return opcode.getValue();
 		}
+	}
+	@Override
+	public int compareTo(Instruction i) {		
+		return Integer.compare(address, i.address);
+		
 	}
 }
