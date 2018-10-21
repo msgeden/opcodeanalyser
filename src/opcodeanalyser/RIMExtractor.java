@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -26,7 +27,6 @@ public class RIMExtractor {
 			if (functionStr.contains("<"+functionName +">"))
 			{				
 				mainAddress=Integer.parseInt(functionStr.substring(0,functionStr.indexOf(" ")),16);
-				System.out.println(functionStr);// TODO:remove
 			}
 			if (!functionStr.contains(">:"))
 				continue;
@@ -76,13 +76,15 @@ public class RIMExtractor {
 	public static void main(String[] args) throws IOException 
 	{
 		
-		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "appoutO0.txt";	
-		String functionName="main";			
+		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "vul-o.txt";	
+		String functionName="main";
+		
 		instructions=parseObjectFileAsInstructionList(filePath,functionName);
 		
 		if(mainAddress==0)
 		    System.out.print("Could not find root function for CFG: " + functionName);
 
+		//shadowStack.push(Integer.valueOf(mainAddress));
 		awaitingBlocks.push(new RIMBlock(0,mainAddress));
 		while (!awaitingBlocks.isEmpty())
 		{
@@ -91,9 +93,17 @@ public class RIMExtractor {
 		}
 		printRIM(RIM);		
 	}
-	private static void printRIM(HashMap<Integer, Set<Integer>> rIM) {
+	private static void printRIM(HashMap<Integer, Set<Integer>> RIM) {
 		// TODO Auto-generated method stub
-		
+		for (Map.Entry<Integer, Set<Integer>> entry : RIM.entrySet()) {
+		    String source = Integer.toHexString(entry.getKey());
+		    System.out.print("s:" + source + "-> d:[");
+		    for (Integer destination:entry.getValue())
+		    {
+		    	System.out.print(" " + Integer.toHexString(destination));
+		    }
+		    System.out.println("]");
+		}
 	}
 	private static void iterateBlock(int source, int blockAddress) {
 		// TODO Auto-generated method stub
@@ -104,9 +114,9 @@ public class RIMExtractor {
 		{			
 			RIM.put(Integer.valueOf(source), new HashSet<Integer>());			
 		}
-		if (!RIM.get(Integer.valueOf(source)).contains(Integer.valueOf(source)))
+		if (!RIM.get(Integer.valueOf(source)).contains(Integer.valueOf(blockAddress)))
 		{			
-			RIM.put(Integer.valueOf(source), new HashSet<Integer>(Arrays.asList(Integer.valueOf(source))));			
+			RIM.put(Integer.valueOf(source), new HashSet<Integer>(Arrays.asList(Integer.valueOf(blockAddress))));			
 		}
 		if (visited.contains(new RIMBlock(source,blockAddress)))
 		{			
@@ -118,12 +128,12 @@ public class RIMExtractor {
 		for (int i=getInstructionIndex(blockAddress);i<instructions.size();i++)
 		{
 			int targetAddress=0;
-			String opcode=instructions.get(i).getOpcode().getValue();	
+			System.out.println("index:"+i+" address:"+instructions.get(i).getAddress());
 			System.out.println(instructions.get(i).printInstruction());
 			if (instructions.get(i).iscJumpTransfer())
 			{
 				//jnz $+2
-				targetAddress=instructions.get(i).getAddress()+Integer.parseInt(instructions.get(i).getOperand1().getValue().substring(2));
+				targetAddress=instructions.get(i).getAddress()+Integer.parseInt(instructions.get(i).getOperand1().getValue().substring(1));;
 				if (skipNextJump){
 					awaitingBlocks.push(new RIMBlock(blockAddress,instructions.get(i+1).getAddress()));				
 				}
@@ -135,8 +145,10 @@ public class RIMExtractor {
 			}
 			if (instructions.get(i).isUcJumpTransfer())
 			{
+				//br #0x123
+				targetAddress=Integer.parseInt(instructions.get(i).getOperand1().getValue().substring(3),16);
 				//jmp $+2
-				targetAddress=instructions.get(i).getAddress()+Integer.parseInt(instructions.get(i).getOperand1().getValue().substring(2));
+				//targetAddress=instructions.get(i).getAddress()+Integer.parseInt(instructions.get(i).getOperand1().getValue().substring(2));
 				awaitingBlocks.push(new RIMBlock(blockAddress,targetAddress));
 				return;
 			}
@@ -151,6 +163,8 @@ public class RIMExtractor {
 			if (instructions.get(i).isRetTransfer())
 			{
 				//calll/br #123				
+				if (shadowStack.isEmpty())
+					return;
 				targetAddress=shadowStack.pop().intValue();
 				awaitingBlocks.push(new RIMBlock(blockAddress,targetAddress));
 				return;

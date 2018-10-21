@@ -45,7 +45,7 @@ public class Definitions {
 		     new String[]{ "jeq","jz","jne","jnz","jc","jnc","jn","jge","jl"}
 		));
 	public static final Set<String> UCJUMP_OPCODES = new HashSet<String>(Arrays.asList(
-		     new String[]{ "jmp"}
+		     new String[]{ "jmp","br"}
 		));
 	public static final Set<String> CALL_OPCODES = new HashSet<String>(Arrays.asList(
 		     new String[]{ "call"}
