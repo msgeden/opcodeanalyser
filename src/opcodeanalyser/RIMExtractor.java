@@ -115,8 +115,11 @@ public class RIMExtractor {
 			RIM.put(Integer.valueOf(source), new HashSet<Integer>());			
 		}
 		if (!RIM.get(Integer.valueOf(source)).contains(Integer.valueOf(blockAddress)))
-		{			
-			RIM.put(Integer.valueOf(source), new HashSet<Integer>(Arrays.asList(Integer.valueOf(blockAddress))));			
+		{	
+			Set<Integer> existing=RIM.get(Integer.valueOf(source));
+			existing.add(Integer.valueOf(blockAddress));
+			RIM.put(Integer.valueOf(source), existing);
+			//RIM.put(Integer.valueOf(source), new HashSet<Integer>(Arrays.asList(Integer.valueOf(blockAddress))));			
 		}
 		if (visited.contains(new RIMBlock(source,blockAddress)))
 		{			
@@ -128,7 +131,7 @@ public class RIMExtractor {
 		for (int i=getInstructionIndex(blockAddress);i<instructions.size();i++)
 		{
 			int targetAddress=0;
-			System.out.println("index:"+i+" address:"+instructions.get(i).getAddress());
+			System.out.println("index:"+i+" address:"+Integer.toHexString(instructions.get(i).getAddress()));
 			System.out.println(instructions.get(i).printInstruction());
 			if (instructions.get(i).iscJumpTransfer())
 			{
@@ -141,6 +144,7 @@ public class RIMExtractor {
 					awaitingBlocks.push(new RIMBlock(blockAddress,instructions.get(i+1).getAddress()));
 					awaitingBlocks.push(new RIMBlock(blockAddress,targetAddress));
 				}
+				System.out.println("block address:"+Integer.toHexString(blockAddress)+" target address:"+Integer.toHexString(targetAddress));	
 				return;
 			}
 			if (instructions.get(i).isUcJumpTransfer())
@@ -149,6 +153,7 @@ public class RIMExtractor {
 				targetAddress=Integer.parseInt(instructions.get(i).getOperand1().getValue().substring(3),16);
 				//jmp $+2
 				//targetAddress=instructions.get(i).getAddress()+Integer.parseInt(instructions.get(i).getOperand1().getValue().substring(2));
+				System.out.println("block address:"+Integer.toHexString(blockAddress)+" target address:"+Integer.toHexString(targetAddress));
 				awaitingBlocks.push(new RIMBlock(blockAddress,targetAddress));
 				return;
 			}
@@ -158,6 +163,7 @@ public class RIMExtractor {
 				targetAddress=Integer.parseInt(instructions.get(i).getOperand1().getValue().substring(1));
 				shadowStack.push(Integer.valueOf(instructions.get(i+1).getAddress()));
 				awaitingBlocks.push(new RIMBlock(blockAddress,targetAddress));
+				System.out.println("block address:"+Integer.toHexString(blockAddress)+" target address:"+Integer.toHexString(targetAddress));
 				return;
 			}
 			if (instructions.get(i).isRetTransfer())
@@ -167,6 +173,8 @@ public class RIMExtractor {
 					return;
 				targetAddress=shadowStack.pop().intValue();
 				awaitingBlocks.push(new RIMBlock(blockAddress,targetAddress));
+				System.out.println("block address:"+Integer.toHexString(blockAddress)+" target address:"+Integer.toHexString(targetAddress));
+				
 				return;
 			}
 		}			
