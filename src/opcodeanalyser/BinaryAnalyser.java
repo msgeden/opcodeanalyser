@@ -2,8 +2,11 @@ package opcodeanalyser;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.apache.commons.io.FileUtils;
 
 public class BinaryAnalyser {
 
@@ -11,18 +14,22 @@ public class BinaryAnalyser {
 		// TODO Auto-generated method stub
 		Collection<File> files = FileHandler.findFiles(FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH),
 				new String[] { "txt" });
-		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "main.o.txt";
-		ArrayList<Instruction> instructions=FileHandler.parseObjectFileAsInstructionList(filePath);
-		
-		
-//		for (File file:files)
-//		{
-//			String filePath = file.getAbsolutePath();
-//			System.out.println(filePath);
-//			Output objectFile=FileHandler.parseObjectFile(filePath);
-//			ObjdumpAnalyser.printStatistics(objectFile);
-//			ObjdumpAnalyser.printOpcodeFrequencies(objectFile);
-//		}
+		//String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "main.o.txt";
+		//ArrayList<Instruction> instructions=FileHandler.parseObjectFileAsInstructionList(filePath);
+		File totalStatsFile = new File(FileHandler.readConfigValue(Definitions.STATS_PATH) + "total_memory_control.tsv");
+		FileUtils.write(totalStatsFile,
+				"Module" + Definitions.TAB_CHAR + "Control" + Definitions.TAB_CHAR + "Memory Read"
+						+ Definitions.TAB_CHAR + "Memory Write" + Definitions.TAB_CHAR + "Other" + Definitions.TAB_CHAR
+						+ "Total"+ Definitions.TAB_CHAR + "Control"+ Definitions.TAB_CHAR + "Read"+ Definitions.TAB_CHAR + "Write"+ Definitions.TAB_CHAR + "Other",
+				Charset.defaultCharset(), true);
+		for (File file:files)
+		{
+			String filePath = file.getAbsolutePath();
+			System.out.println(filePath);
+			Output objectFile=FileHandler.parseObjectFile(filePath);
+			ObjdumpAnalyser.printStatistics(objectFile);
+			ObjdumpAnalyser.printOpcodeFrequencies(objectFile);
+		}
 	}
 }
 //0000d23a <.Loc.178.1>:

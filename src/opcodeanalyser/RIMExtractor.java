@@ -1,5 +1,7 @@
 package opcodeanalyser;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+
+import org.apache.commons.io.FileUtils;
 
 
 public class RIMExtractor {
@@ -76,7 +80,7 @@ public class RIMExtractor {
 	public static void main(String[] args) throws IOException 
 	{
 		
-		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "vul-o.txt";	
+		String filePath = FileHandler.readConfigValue(Definitions.DISSASSEMBLED_PATH) + "ssh-vulnerability.o.txt";	
 		String functionName="main";
 		
 		instructions=parseObjectFileAsInstructionList(filePath,functionName);
@@ -91,18 +95,36 @@ public class RIMExtractor {
 			RIMBlock block = awaitingBlocks.pop();
 			iterateBlock(block.getSource(),block.getTarget());
 		}
-		printRIM(RIM);		
+		printRIM(RIM,filePath);		
 	}
-	private static void printRIM(HashMap<Integer, Set<Integer>> RIM) {
+	private static void printRIM(HashMap<Integer, Set<Integer>> RIM,String filePath) throws IOException {
 		// TODO Auto-generated method stub
+		File cfgFile = new File(filePath.replace(".txt", "-rim.txt"));
+		FileUtils.deleteQuietly(cfgFile);
+		String functionName="main";
+		int state=0;
 		for (Map.Entry<Integer, Set<Integer>> entry : RIM.entrySet()) {
 		    String source = Integer.toHexString(entry.getKey());
-		    System.out.print("s:" + source + "-> d:[");
+		    FileUtils.write(cfgFile, source + " -> " + "S" + state + " -> [", Charset.defaultCharset(), true);
+		    System.out.print(source + " -> " + "S" + state + " -> [");
+		    int count=0;
 		    for (Integer destination:entry.getValue())
 		    {
-		    	System.out.print(" " + Integer.toHexString(destination));
+		    	if (count==0)
+		    	{
+		    		FileUtils.write(cfgFile, Integer.toHexString(destination),Charset.defaultCharset(),true);
+		    		System.out.print(Integer.toHexString(destination));
+		    	}
+		    	else
+		    	{
+		    		FileUtils.write(cfgFile,","+Integer.toHexString(destination),Charset.defaultCharset(),true);
+		    		System.out.print(","+Integer.toHexString(destination));
+		    	}
+		    	count++;
 		    }
+		    FileUtils.write(cfgFile,"]",Charset.defaultCharset(),true);
 		    System.out.println("]");
+		    state++;
 		}
 	}
 	private static void iterateBlock(int source, int blockAddress) {
@@ -167,6 +189,17 @@ public class RIMExtractor {
 				return;
 			}
 			if (instructions.get(i).isRetTransfer())
+			{
+				//calll/br #123				
+				if (shadowStack.isEmpty())
+					return;
+				targetAddress=shadowStack.pop().intValue();
+				awaitingBlocks.push(new RIMBlock(blockAddress,targetAddress));
+				System.out.println("block address:"+Integer.toHexString(blockAddress)+" target address:"+Integer.toHexString(targetAddress));
+				
+				return;
+			}
+			if (instructions.get(i).isMemoryRead())
 			{
 				//calll/br #123				
 				if (shadowStack.isEmpty())

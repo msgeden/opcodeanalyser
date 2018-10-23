@@ -21,11 +21,6 @@ public class ObjdumpAnalyser {
 						+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
 						+ "TOTAL",
 				Charset.defaultCharset(), true);
-		FileUtils.write(totalStatsFile,
-				"FUNCTION" + Definitions.TAB_CHAR + "CONTROL_TRANSFERS" + Definitions.TAB_CHAR + "MEMORY_READ"
-						+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
-						+ "TOTAL"+ Definitions.TAB_CHAR + "CONTROL_RATIO"+ Definitions.TAB_CHAR + "READ_RATIO"+ Definitions.TAB_CHAR + "WRITE_RATIO"+ Definitions.TAB_CHAR + "OTHER_RATIO",
-				Charset.defaultCharset(), true);
 		System.out.print("FUNCTION" + Definitions.TAB_CHAR + "CONTROL_TRANSFERS" + Definitions.TAB_CHAR + "MEMORY_READ"
 				+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
 				+ "TOTAL");
