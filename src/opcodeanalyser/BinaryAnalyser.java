@@ -18,9 +18,15 @@ public class BinaryAnalyser {
 		//ArrayList<Instruction> instructions=FileHandler.parseObjectFileAsInstructionList(filePath);
 		File totalStatsFile = new File(FileHandler.readConfigValue(Definitions.STATS_PATH) + "total_memory_control.tsv");
 		FileUtils.write(totalStatsFile,
-				"Module" + Definitions.TAB_CHAR + "Control" + Definitions.TAB_CHAR + "Memory Read"
+				"\nModule" + Definitions.TAB_CHAR + "Control" 
+				+Definitions.TAB_CHAR + "CControl"
+				+Definitions.TAB_CHAR + "UcControl"
+						+ Definitions.TAB_CHAR + "Memory Read"
 						+ Definitions.TAB_CHAR + "Memory Write" + Definitions.TAB_CHAR + "Other" + Definitions.TAB_CHAR
-						+ "Total"+ Definitions.TAB_CHAR + "Control"+ Definitions.TAB_CHAR + "Read"+ Definitions.TAB_CHAR + "Write"+ Definitions.TAB_CHAR + "Other",
+						+ "Total"+ Definitions.TAB_CHAR + "Control Ratio"
+						+ Definitions.TAB_CHAR + "CControl Ratio"
+						+ Definitions.TAB_CHAR + "UCControl Ratio"
+						+ Definitions.TAB_CHAR + "Read Ratio"+ Definitions.TAB_CHAR + "Write Ratio"+ Definitions.TAB_CHAR + "Other Ratio",
 				Charset.defaultCharset(), true);
 		for (File file:files)
 		{

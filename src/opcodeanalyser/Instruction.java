@@ -108,12 +108,20 @@ public class Instruction implements Comparable<Instruction> {
 	public boolean isUcJumpTransfer() {
 		return ucJumpTransfer;
 	}
+	public boolean iscControlTransfer() {
+		return cControlTransfer;
+	}
+	public boolean isUcControlTransfer() {
+		return ucControlTransfer;
+	}
 
 	private boolean controlTransfer;
 	private boolean retTransfer;	
 	private boolean callTransfer;
 	private boolean cJumpTransfer;
 	private boolean ucJumpTransfer;
+	private boolean cControlTransfer;
+	private boolean ucControlTransfer;
 	private boolean memoryRead;
 	private boolean memoryWrite;	
 
@@ -127,6 +135,8 @@ public class Instruction implements Comparable<Instruction> {
 		setCallTransfer();
 		setCJumpTransfer();
 		setUcJumpTransfer();
+		setCControlTransfer();
+		setUcControlTransfer();
 	}
 	public void setRetTransfer() {
 		retTransfer = Definitions.RET_OPCODES.contains(opcode.getValue());
@@ -139,6 +149,12 @@ public class Instruction implements Comparable<Instruction> {
 	}
 	public void setUcJumpTransfer() {
 		ucJumpTransfer = Definitions.UCJUMP_OPCODES.contains(opcode.getValue());
+	}
+	public void setCControlTransfer() {
+		cControlTransfer = Definitions.CJUMP_OPCODES.contains(opcode.getValue());
+	}
+	public void setUcControlTransfer() {
+		ucControlTransfer = Definitions.UCCONTROL_OPCODES.contains(opcode.getValue());
 	}
 	public void setMemoryRead() {
 		boolean found = false;

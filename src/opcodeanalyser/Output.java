@@ -32,6 +32,8 @@ public class Output extends Code{
 		for (Block function:functions)
 		{
 			super.controlCount+=function.getControlCount();
+			super.conditionalControlCount+=function.getConditionalControlCount();
+			super.unconditionalControlCount+=function.getUnconditionalControlCount();
 			super.readCount+=function.getReadCount();
 			super.writeCount+=function.getWriteCount();
 			super.otherCount+=function.getOtherCount();

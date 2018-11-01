@@ -4,6 +4,12 @@ public class Code {
 	public int getControlCount() {
 		return controlCount;
 	}
+	public int getConditionalControlCount() {
+		return conditionalControlCount;
+	}
+	public int getUnconditionalControlCount() {
+		return unconditionalControlCount;
+	}
 	public int getReadCount() {
 		return readCount;
 	}
@@ -17,6 +23,8 @@ public class Code {
 		return totalCount;
 	}
 	protected int controlCount=0;
+	protected int conditionalControlCount=0;
+	protected int unconditionalControlCount=0;
 	protected int readCount=0;
 	protected int writeCount=0;
 	protected int otherCount=0;

@@ -44,6 +44,10 @@ public class Definitions {
 	public static final Set<String> CJUMP_OPCODES = new HashSet<String>(Arrays.asList(
 		     new String[]{ "jeq","jz","jne","jnz","jc","jnc","jn","jge","jl"}
 		));
+	public static final Set<String> UCCONTROL_OPCODES = new HashSet<String>(Arrays.asList(
+		     new String[]{ "jmp","br","call","reti","ret"}
+		));
+	
 	public static final Set<String> UCJUMP_OPCODES = new HashSet<String>(Arrays.asList(
 		     new String[]{ "jmp","br"}
 		));
