@@ -40,10 +40,14 @@ public class Block extends Code {
 			super.totalCount++;
 			if (instruction.isControlTransfer()) {
 				super.controlCount++;
-				if (instruction.iscControlTransfer())
-					super.conditionalControlCount++;
-				else if (instruction.isUcControlTransfer())
-					super.unconditionalControlCount++;
+				if (instruction.iscJumpTransfer())
+					super.conditionalJumpCount++;
+				else if (instruction.isUcJumpTransfer())
+					super.unconditionalJumpCount++;
+				else if (instruction.isCallTransfer())
+					super.callCount++;
+				else if (instruction.isRetTransfer())
+					super.retCount++;
 			} 
 			else if (instruction.isMemoryRead())
 				super.readCount++;

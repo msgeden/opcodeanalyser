@@ -17,29 +17,37 @@ public class ObjdumpAnalyser {
 				+ objectFile.getFileName().replaceAll("txt", "tsv"));
 		FileUtils.deleteQuietly(instructionStatsFile);
 		FileUtils.write(instructionStatsFile,
-				"FUNCTION" + Definitions.TAB_CHAR + "CONTROL_TRANSFERS" + Definitions.TAB_CHAR + "CCONTROL_TRANSFERS" + Definitions.TAB_CHAR + "UCCONTROL_TRANSFERS" + Definitions.TAB_CHAR + "MEMORY_READ"
+				"FUNCTION" + Definitions.TAB_CHAR + "CJUMP" + Definitions.TAB_CHAR + "UJUMP" + Definitions.TAB_CHAR + "CALL"
+						+ Definitions.TAB_CHAR + "RET"
+						+ Definitions.TAB_CHAR + "MEMORY_READ"
 						+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
 						+ "TOTAL",
 				Charset.defaultCharset(), true);
-		System.out.print(	"FUNCTION" + Definitions.TAB_CHAR + "CONTROL_TRANSFERS" + Definitions.TAB_CHAR + "CCONTROL_TRANSFERS" + Definitions.TAB_CHAR + "UCCONTROL_TRANSFERS" + Definitions.TAB_CHAR + "MEMORY_READ"
+		System.out.print(	"FUNCTION" + Definitions.TAB_CHAR + "CJUMP" + Definitions.TAB_CHAR + "UJUMP" + Definitions.TAB_CHAR + "CALL"
+				+ Definitions.TAB_CHAR + "RET"
+				+ Definitions.TAB_CHAR + "MEMORY_READ"
 				+ Definitions.TAB_CHAR + "MEMORY_WRITE" + Definitions.TAB_CHAR + "OTHER" + Definitions.TAB_CHAR
 				+ "TOTAL");
 
 		for (Block block : objectFile.getFunctions()) {
 			block.countInstructions();
 			FileUtils.write(instructionStatsFile,
-					Definitions.NEW_LINE + block.getBlockName() + Definitions.TAB_CHAR + block.getControlCount()
-					+ Definitions.TAB_CHAR + block.getConditionalControlCount()
-					+ Definitions.TAB_CHAR + block.getUnconditionalControlCount()
+					Definitions.NEW_LINE + block.getBlockName() 
+					+ Definitions.TAB_CHAR + block.getConditionalJumpCount()
+					+ Definitions.TAB_CHAR + block.getUnconditionalJumpCount()
+					+ Definitions.TAB_CHAR + block.getCallCount()
+					+ Definitions.TAB_CHAR + block.getRetCount()
+					
 							+ Definitions.TAB_CHAR + block.getReadCount() + Definitions.TAB_CHAR + block.getWriteCount()
 							+ Definitions.TAB_CHAR + block.getOtherCount() + Definitions.TAB_CHAR
 							+ block.getTotalCount(),
 					Charset.defaultCharset(), true);
-			System.out.print(Definitions.NEW_LINE + block.getBlockName() + Definitions.TAB_CHAR
-					+ block.getControlCount() 
-					+ Definitions.TAB_CHAR + block.getConditionalControlCount()
-					+ Definitions.TAB_CHAR + block.getUnconditionalControlCount()
-					+ Definitions.TAB_CHAR + block.getReadCount() + Definitions.TAB_CHAR
+			System.out.print(Definitions.NEW_LINE + block.getBlockName() 
+			+ Definitions.TAB_CHAR + block.getConditionalJumpCount()
+			+ Definitions.TAB_CHAR + block.getUnconditionalJumpCount()
+			+ Definitions.TAB_CHAR + block.getCallCount()
+			+ Definitions.TAB_CHAR + block.getRetCount()
+			+ Definitions.TAB_CHAR + block.getReadCount() + Definitions.TAB_CHAR
 					+ block.getWriteCount() + Definitions.TAB_CHAR + block.getOtherCount() + Definitions.TAB_CHAR
 					+ block.getTotalCount());
 
@@ -47,33 +55,37 @@ public class ObjdumpAnalyser {
 		objectFile.countInstructions();
 		FileUtils.write(instructionStatsFile,
 				Definitions.NEW_LINE + objectFile.getFileName() + Definitions.TAB_CHAR + objectFile.getControlCount()
-				+ Definitions.TAB_CHAR + objectFile.getControlCount()
-				+ Definitions.TAB_CHAR + objectFile.getConditionalControlCount()
-				+ Definitions.TAB_CHAR + objectFile.getUnconditionalControlCount()
-			
+				+ Definitions.TAB_CHAR + objectFile.getConditionalJumpCount()
+				+ Definitions.TAB_CHAR + objectFile.getUnconditionalJumpCount()
+				+ Definitions.TAB_CHAR + objectFile.getCallCount()
+				+ Definitions.TAB_CHAR + objectFile.getRetCount()
+		
 						+ Definitions.TAB_CHAR + objectFile.getReadCount() + Definitions.TAB_CHAR
 						+ objectFile.getWriteCount() + Definitions.TAB_CHAR + objectFile.getOtherCount()
 						+ Definitions.TAB_CHAR + objectFile.getTotalCount(),
 				Charset.defaultCharset(), true);
-		System.out.print(Definitions.NEW_LINE + objectFile.getFileName() + Definitions.TAB_CHAR
-				+ objectFile.getControlCount() 
-				+ Definitions.TAB_CHAR + objectFile.getConditionalControlCount()
-				+ Definitions.TAB_CHAR + objectFile.getUnconditionalControlCount()
-				+ Definitions.TAB_CHAR + objectFile.getReadCount() + Definitions.TAB_CHAR
+		System.out.print(Definitions.NEW_LINE + objectFile.getFileName() 
+		+ Definitions.TAB_CHAR + objectFile.getConditionalJumpCount()
+		+ Definitions.TAB_CHAR + objectFile.getUnconditionalJumpCount()
+		+ Definitions.TAB_CHAR + objectFile.getCallCount()
+		+ Definitions.TAB_CHAR + objectFile.getRetCount()
+		+ Definitions.TAB_CHAR + objectFile.getReadCount() + Definitions.TAB_CHAR
 				+ objectFile.getWriteCount() + Definitions.TAB_CHAR + objectFile.getOtherCount() + Definitions.TAB_CHAR
 				+ objectFile.getTotalCount());
 		FileUtils.write(totalStatsFile,
-				Definitions.NEW_LINE + objectFile.getFileName() + Definitions.TAB_CHAR + objectFile.getControlCount()
-				+ Definitions.TAB_CHAR + objectFile.getConditionalControlCount()
-				+ Definitions.TAB_CHAR + objectFile.getUnconditionalControlCount()
-			
+				Definitions.NEW_LINE + objectFile.getFileName() 
+				+ Definitions.TAB_CHAR + objectFile.getConditionalJumpCount()
+				+ Definitions.TAB_CHAR + objectFile.getUnconditionalJumpCount()
+				+ Definitions.TAB_CHAR + objectFile.getCallCount()
+				+ Definitions.TAB_CHAR + objectFile.getRetCount()
+		
 						+ Definitions.TAB_CHAR + objectFile.getReadCount() + Definitions.TAB_CHAR
 						+ objectFile.getWriteCount() + Definitions.TAB_CHAR + objectFile.getOtherCount()
 						+ Definitions.TAB_CHAR + objectFile.getTotalCount()+ 
-						Definitions.TAB_CHAR+(float)objectFile.getControlCount()/objectFile.getTotalCount()+
-						Definitions.TAB_CHAR+(float)objectFile.getConditionalControlCount()/objectFile.getTotalCount()+
-						Definitions.TAB_CHAR+(float)objectFile.getUnconditionalControlCount()/objectFile.getTotalCount()+
-						
+						Definitions.TAB_CHAR+(float)objectFile.getConditionalJumpCount()/objectFile.getTotalCount()+
+						Definitions.TAB_CHAR+(float)objectFile.getUnconditionalJumpCount()/objectFile.getTotalCount()+
+						Definitions.TAB_CHAR+(float)objectFile.getCallCount()/objectFile.getTotalCount()+
+						Definitions.TAB_CHAR+(float)objectFile.getRetCount()/objectFile.getTotalCount()+
 						
 						Definitions.TAB_CHAR+(float)objectFile.getReadCount()/objectFile.getTotalCount()+ Definitions.TAB_CHAR+(float)objectFile.getWriteCount()/objectFile.getTotalCount()+ Definitions.TAB_CHAR+(float)objectFile.getOtherCount()/objectFile.getTotalCount(),
 				Charset.defaultCharset(), true);
